@@ -1,0 +1,17 @@
+=== Resumen IDL02 - Versión Estudiante ===
+Variables utilizadas: ['ComprasTotales', 'FrecuenciaCompras', 'MontoPromedioCompra']
+Mejor k (K-Means): 2
+Silueta K-Means: 0.576
+Silueta DBSCAN: 0.555
+
+-- Perfil de clusters K-Means (media/mediana/cantidad) --
+  ComprasTotales               FrecuenciaCompras              MontoPromedioCompra             
+            mean  median count              mean median count                mean median count
+0         2950.0  3000.0     4             19.75   21.0     4               152.5  155.0     4
+1          700.0   600.0     6              7.00    6.0     6               100.0  100.0     6
+
+-- Perfil de clusters DBSCAN --
+   ComprasTotales               FrecuenciaCompras              MontoPromedioCompra             
+             mean  median count              mean median count                mean median count
+-1         3750.0  3750.0     2             23.50   23.5     2              167.50  167.5     2
+ 0         1062.5   850.0     8              9.25    8.5     8              109.38  100.0     8
