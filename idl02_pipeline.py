@@ -1,34 +1,11 @@
 """
 =============================================
-IDL02 - Proyecto de No Supervisado (Versión Estudiante)
+IDL02 - Proyecto de No Supervisado
 Tema: Clustering (K-Means y DBSCAN) + PCA + Métricas
-Hecho por: [Tu Nombre] - Curso ML I
 =============================================
-
-Qué hace este script:
-1) Carga el dataset de clientes (compras, frecuencia, monto).
-2) Escala las variables numéricas (muy importante para distancia).
-3) Prueba K-Means con varios k (elbow + silhouette) y elige el mejor.
-4) Corre DBSCAN (con gráfica k-distance para estimar eps).
-5) Aplica PCA para ver los clusters en 2D y muestra varianza explicada.
-6) Guarda gráficos y resultados (CSV con etiquetas y resumen TXT).
-
-Cómo lo corro (ejemplos):
-(venv_ML_IDL02) > python idl02_pipeline.py --data historial_compras.csv --kmin 2 --kmax 8 --eps 0.5 --min_samples 5
-
-Qué genera:
-- figures/elbow_kmeans.png
-- figures/silhouette_by_k.png
-- figures/kdist_dbscan.png
-- figures/pca_kmeans.png
-- figures/pca_dbscan.png
-- figures/pca_variance.png
-- outputs/segmented_kmeans.csv
-- outputs/segmented_dbscan.csv
-- outputs/summary.txt
 """
 
-# ====== 0) IMPORTS QUE USO EN TODO EL FLUJO ======
+# 0) IMPORTACIÓN DE LIBRERÍAS
 import argparse
 import os
 import numpy as np
@@ -42,21 +19,20 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.decomposition import PCA
 
 
-# ====== 1) FUNCIONES AUXILIARES ======
-
+# 1) FUNCIONES AUXILIARES
 def load_data(path):
     """
-    Carga el CSV y verifica que existan las columnas que pide el caso:
+    Carga del CSV y verificación de columnas requeridas:
     - ComprasTotales
     - FrecuenciaCompras
     - MontoPromedioCompra
-    También quito nulos básicos para evitar errores al escalar/clusterear.
+    Eliminación de nulos para evitar errores al escalar/clusterear.
     """
     df = pd.read_csv(path)
     cols = ["ComprasTotales", "FrecuenciaCompras", "MontoPromedioCompra"]
     missing = [c for c in cols if c not in df.columns]
     if missing:
-        # Si falta alguna columna, paro con un mensaje claro.
+        # Si falta alguna columna, se alerta
         raise ValueError(f"Faltan columnas requeridas en el dataset: {missing}")
     df = df.dropna(subset=cols).copy()
     return df, cols
@@ -195,7 +171,7 @@ def profile_clusters(df, labels, cols):
     return prof
 
 
-# ====== 2) MAIN: DONDE JUNTO TODO ======
+# 2) MAIN: DONDE JUNTO TODO 
 
 def main():
     # --- 2.1) Argumentos por consola para que el profe vea que parametrizo ---
@@ -204,8 +180,8 @@ def main():
                         help="Ruta al CSV de clientes (por defecto: data/historial_compras.csv)")
     parser.add_argument("--kmin", type=int, default=2, help="k mínimo para K-Means")
     parser.add_argument("--kmax", type=int, default=8, help="k máximo para K-Means")
-    parser.add_argument("--eps", type=float, default=0.5, help="eps para DBSCAN")
-    parser.add_argument("--min_samples", type=int, default=5, help="min_samples para DBSCAN")
+    parser.add_argument("--eps", type=float, default=1.8, help="eps para DBSCAN")
+    parser.add_argument("--min_samples", type=int, default=3, help="min_samples para DBSCAN")
     args = parser.parse_args()
 
     # --- 2.2) Creo carpetas de salida si no existen ---
@@ -293,6 +269,6 @@ def main():
         print("Silueta DBSCAN: N/A (clusters insuficientes o solo ruido)")
 
 
-# ====== 3) ARRANQUE DEL SCRIPT ======
+# 3) ARRANQUE DEL SCRIPT 
 if __name__ == "__main__":
     main()
